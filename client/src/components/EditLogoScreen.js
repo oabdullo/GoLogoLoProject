@@ -9,6 +9,8 @@ const GET_LOGO = gql`
         logo(id: $logoId) {
             _id
             text
+            height
+            width
             color
             fontSize
             backgroundColor
@@ -25,6 +27,8 @@ const UPDATE_LOGO = gql`
     mutation updateLogo(
         $id: String!,
         $text: String!,
+        $height: Int!,
+        $width: Int!,
         $color: String!,
         $fontSize: Int!,
         $backgroundColor: String!,
@@ -36,6 +40,8 @@ const UPDATE_LOGO = gql`
             updateLogo(
                 id: $id,
                 text: $text,
+                height: $height,
+                width: $width,
                 color: $color,
                 fontSize: $fontSize
                 backgroundColor: $backgroundColor,
@@ -56,6 +62,8 @@ class EditLogoScreen extends Component {
 
         this.state = {
             renderText: "",
+            renderHeight: "",
+            renderWidth: "",
             renderColor: "",
             renderBackgroundColor: "",
             renderBorderColor: "",
@@ -68,7 +76,7 @@ class EditLogoScreen extends Component {
     }
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, margin;
+        let text, height, width, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, margin;
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
@@ -89,11 +97,13 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body row">                                            
                                             <form className="col-6" onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
+                                                updateLogo({ variables: { id: data.logo._id, text: text.value, height: parseInt(height.value), width: parseInt(width.value) ,color: color.value, fontSize: parseInt(fontSize.value),
                                                                             backgroundColor: backgroundColor.value, borderColor: borderColor.value,
                                                                             borderWidth: parseInt(borderWidth.value), borderRadius: parseInt(borderRadius.value),
                                                                             padding: parseInt(padding.value), margin: parseInt(margin.value)  } });
                                                 text.value = "";
+                                                height.vaule= "";
+                                                width.value = "";
                                                 color.value = "";
                                                 fontSize.value = "";
                                                 backgroundColor.value = "";
@@ -108,6 +118,18 @@ class EditLogoScreen extends Component {
                                                     <input type="text" className="form-control" name="text" ref={node => {
                                                         text = node;
                                                     }} onChange={() => this.setState({renderText: text.value})} placeholder={data.logo.text} defaultValue={data.logo.text} />
+                                                </div>
+                                                <div className="form-group col-8">
+                                                    <label htmlFor="height">Height :</label>
+                                                    <input type="number" onInput={()=>{height.value = clamp(height.value, 0, 1400);}} className="form-control" name="height" ref={node => {
+                                                        height = node;
+                                                    }} onChange={() => this.setState({renderHeight: parseInt(height.value)})} placeholder={data.logo.height} defaultValue={data.logo.height} />
+                                                </div>
+                                                <div className="form-group col-8">
+                                                    <label htmlFor="width">Width :</label>
+                                                    <input type="number" onInput={()=>{width.value = clamp(width.value, 0, 1400);}} className="form-control" name="width" ref={node => {
+                                                        width = node;
+                                                    }} onChange={() => this.setState({renderWidth: parseInt(width.value)})} placeholder={data.logo.width} defaultValue={data.logo.width} />
                                                 </div>
                                                 <div className="form-group col-4">
                                                     <label htmlFor="color">Color:</label>
@@ -159,9 +181,11 @@ class EditLogoScreen extends Component {
                                                 </div>
                                                 <button type="submit" className="btn btn-success">Submit</button>
                                             </form>
-                                            <div className="col-6">
+                                            <div className="col-6" >
                                                 <span style={{
                                                     display: "inline-block",
+                                                    height: (this.state.renderHeight ? this.state.renderHeight : data.logo.height) + "px",
+                                                    width: (this.state.renderWidth ? this.state.renderWidth : data.logo.width) + "px",
                                                     color: this.state.renderColor ? this.state.renderColor : data.logo.color,
                                                     backgroundColor: this.state.renderBackgroundColor ? this.state.renderBackgroundColor : data.logo.backgroundColor,
                                                     borderColor: this.state.renderBorderColor ? this.state.renderBorderColor : data.logo.borderColor,
