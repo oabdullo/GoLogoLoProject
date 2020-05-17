@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { clamp } from "../utils/utlity";
+import * as html2canvas from 'html2canvas';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -184,6 +185,7 @@ class EditLogoScreen extends Component {
                                             <div className="col-6" >
                                                 <span style={{
                                                     display: "inline-block",
+                                                    overflow: "auto",
                                                     height: (this.state.renderHeight ? this.state.renderHeight : data.logo.height) + "px",
                                                     width: (this.state.renderWidth ? this.state.renderWidth : data.logo.width) + "px",
                                                     color: this.state.renderColor ? this.state.renderColor : data.logo.color,

@@ -9,6 +9,8 @@ const GET_LOGO = gql`
         logo(id: $logoId) {
             _id
             text
+            height
+            width
             color
             fontSize
             backgroundColor
@@ -53,6 +55,10 @@ class ViewLogoScreen extends Component {
                                         <dl>
                                             <dt>Text:</dt>
                                             <dd>{data.logo.text}</dd>
+                                            <dt>Height:</dt>
+                                            <dd>{data.logo.height}</dd>
+                                            <dt>width:</dt>
+                                            <dd>{data.logo.width}</dd>
                                             <dt>Color:</dt>
                                             <dd>{data.logo.color}</dd>
                                             <dt>BackgroundColor:</dt>
@@ -92,8 +98,11 @@ class ViewLogoScreen extends Component {
                                     </div>
                                     <div className="col-6">
                                         <span style={{
+                                            overflow: "auto",
                                             display: "inline-block",
                                             color: data.logo.color,
+                                            height: data.logo.height,
+                                            width:  data.logo.width,
                                             backgroundColor: data.logo.backgroundColor,
                                             borderColor: data.logo.borderColor,
                                             borderStyle: "solid",

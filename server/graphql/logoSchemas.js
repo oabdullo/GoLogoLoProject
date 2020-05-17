@@ -1,6 +1,7 @@
 var GraphQLSchema = require('graphql').GraphQLSchema;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLList = require('graphql').GraphQLList;
+var GraphQlInputObjectType = require('graphql').GraphQLInputObjectType
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLID = require('graphql').GraphQLID;
@@ -8,6 +9,54 @@ var GraphQLString = require('graphql').GraphQLString;
 var GraphQLInt = require('graphql').GraphQLInt;
 var GraphQLDate = require('graphql-date');
 var LogoModel = require('../models/Logo');
+
+var textTypeInput = new GraphQlInputObjectType({
+    name : "textInput",
+    fields: function(){
+        return {
+            text :{
+                type: GraphQLString
+            },
+            fontSize :{
+                type: GraphQLInt
+            },
+            color : {
+                type : GraphQLString
+            },
+            x:{
+                type : GraphQLInt
+            },
+            y :{
+                type: GraphQLInt
+            }
+    }
+}
+})
+
+var textType= new GraphQLObjectType({
+    name: 'text',
+    fields: function(){
+        return {
+           
+            text :{
+                type: GraphQLString
+            },
+            fontSize :{
+                type: GraphQLInt
+            },
+            color : {
+                type : GraphQLString
+            },
+            x:{
+                type : GraphQLInt
+            },
+            y :{
+                type: GraphQLInt
+            }
+
+        }
+    }
+})
 
 var logoType = new GraphQLObjectType({
     name: 'logo',
@@ -18,11 +67,11 @@ var logoType = new GraphQLObjectType({
             },
             
             text: {
-                type: GraphQLString
+                type: new GraphQLList(textType)
             },
-            url:{
-                type: GraphQLList(GraphQLString)
-            },
+            // url:{
+            //     type: GraphQLList(GraphQLString)
+            // },
             height:{
                 type: GraphQLInt
             },
@@ -60,6 +109,8 @@ var logoType = new GraphQLObjectType({
     }
 });
 
+
+
 var queryType = new GraphQLObjectType({
     name: 'Query',
     fields: function () {
@@ -93,9 +144,10 @@ var queryType = new GraphQLObjectType({
             getLogoByText: {
                 type: new GraphQLList(logoType),
                 args: {
-                    text: {
+                    texts: {
                         name: 'text',
-                        type: GraphQLString
+                        type: textTypeInput
+                        
                     }
                 },
                 resolve: function(root, params){
@@ -109,7 +161,7 @@ var queryType = new GraphQLObjectType({
             getLogosByTextContains: {
                 type: new GraphQLList(logoType),
                 args: {
-                    text: {
+                    texts: {
                         name: 'text',
                         type: (GraphQLString)
                     }
@@ -134,11 +186,11 @@ var mutation = new GraphQLObjectType({
                 type: logoType,
                 args: {
                     text: {
-                        type: new GraphQLList(GraphQLString)
+                        type: new GraphQLNonNull(GraphQLString)
                     },
-                    url:{
-                        type: new GraphQLList( GraphQLString)
-                    },
+                    // url:{
+                    //     type: new GraphQLList( GraphQLString)
+                    // },
                     height:{
                         type: new GraphQLNonNull(GraphQLInt)
                     },
@@ -187,7 +239,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     text: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLList(textTypeInput)
                     },
                     // url:{
                     //     type: new GraphQLList( GraphQLString)
@@ -225,7 +277,7 @@ var mutation = new GraphQLObjectType({
                 },
                 resolve(root, params) {
                     return LogoModel.findByIdAndUpdate(params.id,
-                        { text: params.text, url: params.url, height: params.height, width: params.width ,  color: params.color, fontSize: params.fontSize,
+                        { text: params.text.text, url: params.url, height: params.height, width: params.width ,  color: params.color, fontSize: params.fontSize,
                             backgroundColor : params.backgroundColor, borderColor : params.borderColor,
                             borderWidth: params.borderWidth, borderRadius: params.borderRadius,
                             padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {

@@ -12,7 +12,12 @@ import EditLogoScreen from './components/EditLogoScreen';
 import CreateLogoScreen from './components/CreateLogoScreen';
 import ViewLogoScreen from './components/ViewLogoScreen';
 
-const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
+const client = new ApolloClient({ uri: 'http://localhost:3000/graphql',
+onError: ({networkError, graphQLErrors})=>
+{
+    console.log('graphQLErrors', graphQLErrors)
+    console.log('networkError', networkError)
+}});
 
 ReactDOM.render(
     <ApolloProvider client={client}>

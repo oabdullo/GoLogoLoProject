@@ -2,8 +2,14 @@ var mongoose = require('mongoose');
 
 var LogoSchema = new mongoose.Schema({
   id: String,
-  text: String,
-  url: [String],
+  text: [{
+    text: String,
+    fontSize : Number,
+    color : String,
+    x: Number,
+    y: Number
+  }],
+  // url: [String],
   height : {type:Number},
   width: {type: Number},
   color: String,
