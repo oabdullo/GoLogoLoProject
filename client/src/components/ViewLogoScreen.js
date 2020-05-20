@@ -15,6 +15,11 @@ const GET_LOGO = gql`
                 x
                 y
             }
+            url{
+                url
+                x
+                y
+            }
             height
             width
             backgroundColor
@@ -65,6 +70,8 @@ class ViewLogoScreen extends Component {
                                             <dd>{data.logo.width}</dd>
                                             <dt>Color:</dt>
                                             <dd>{data.logo.text[0].fontSize}</dd>
+                                            <dt>URL</dt>
+                                            <dd>{data.logo.url[0].url}</dd>
                                             <dt>BackgroundColor:</dt>
                                             <dd>{data.logo.backgroundColor}</dd>
                                             <dt>BorderColor:</dt>

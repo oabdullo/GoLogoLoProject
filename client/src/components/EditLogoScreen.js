@@ -20,6 +20,11 @@ const GET_LOGO = gql`
                 x
                 y
             }
+            url {
+                url
+                x
+                y
+            }
             height
             width
             backgroundColor
@@ -36,6 +41,7 @@ const UPDATE_LOGO = gql`
     mutation updateLogo(
         $id: String!,
         $text: [textInput]!,
+        $url: [urlInput]!,
         $height: Int!,
         $width: Int!,
         $backgroundColor: String!,
@@ -47,9 +53,9 @@ const UPDATE_LOGO = gql`
             updateLogo(
                 id: $id,
                 text: $text,
+                url: $url,
                 height: $height,
-                width: $width,
-                
+                width: $width,  
                 backgroundColor: $backgroundColor,
                 borderColor: $borderColor,
                 borderWidth: $borderWidth,
@@ -62,6 +68,11 @@ const UPDATE_LOGO = gql`
 `;
 
 class EditLogoScreen extends Component {
+    handleURLChange=(event)=>{
+        this.state.url[0].url = event.target.value
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }
     handleCoordinates=(e, data, index)=>{
         this.props.logo.text[index].x = data.x;
         this.props.logo.text[index].y = data.y;
@@ -134,7 +145,7 @@ class EditLogoScreen extends Component {
     }
 
     render() {
-        let text, height, width, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, margin;
+        let text, url, height, width, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, margin;
         
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
@@ -144,8 +155,8 @@ class EditLogoScreen extends Component {
                     if(!this.flag){
                         let fill = filter(GET_LOGO, data);
                         this.state= {
-                            
                             text:fill.logo.text,
+                            url: fill.logo.url,
                             color: fill.logo.text[0].color,
                             backgroundColor:fill.logo.backgroundColor,
                             borderColor:fill.logo.borderColor,
@@ -172,11 +183,12 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body row">                                            
                                             <form className="col-6" onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, text: this.state.text, height : parseInt(this.state.height), width: parseInt(this.state.width) , 
+                                                updateLogo({ variables: { id: data.logo._id, text: this.state.text, url: this.state.url, height : parseInt(this.state.height), width: parseInt(this.state.width) , 
                                                     backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor,
                                                     borderWidth: parseInt(this.state.borderWidth), borderRadius: parseInt(this.state.borderRadius),
                                                     padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)} });
                                                 text.value = "";
+                                                url.value = "";
                                                 height.vaule= "";
                                                 width.value = "";
                                                 color.value = "";
@@ -188,7 +200,7 @@ class EditLogoScreen extends Component {
                                                 padding.value = "";
                                                 margin.value = "";
                                             }}>
-                                                                                                <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
+                                            <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
 
                                                 <div className="form-group col-8">
 
@@ -210,6 +222,12 @@ class EditLogoScreen extends Component {
                                         <input type="color" className="form-control" name="color" ref={node => {
                                             color = node;
                                         }}onChange={this.handleColorChange} defaultValue={this.state.color} placeholder="Color" />
+                                    </div>
+                                    <div className="form-group col-8">
+                                        <label htmlFor="url">URL:</label>
+                                        <input type="text" className="form-control" name="url" ref={node => {
+                                            url = node;
+                                        }} onChange={this.handleURLChange} placeholder="Url"   />
                                     </div>
                                     <div className="form-group col-4">
                                         <label htmlFor="backgroundColor">Background Color:</label>

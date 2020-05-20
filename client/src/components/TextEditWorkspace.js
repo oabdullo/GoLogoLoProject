@@ -33,7 +33,8 @@ class TextEditWorkspace extends Component {
             
                 style={ styles.container }>
                 {this.props.logo.text.map((texts, index) => (<Rnd position={{ x: texts.x, y: texts.y }} 
-  onDragStop={(e, data) => {this.handleCoordinates(e,data,index)}} key={index} style={{fontSize: texts.fontSize, color: texts.color}}> {texts.text} </Rnd>))}
+  onDragStop={(e, data) => {this.handleCoordinates(e,data,index)}} key={index} style={{fontSize: texts.fontSize, color: texts.color}}> {texts.text}  </Rnd>))}
+  
             </div>
             
         )

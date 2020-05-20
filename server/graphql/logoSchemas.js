@@ -32,6 +32,40 @@ var textTypeInput = new GraphQlInputObjectType({
     }
 }
 })
+var urlTypeInput = new GraphQlInputObjectType({
+    name : "urlInput",
+    fields: function(){
+        return {
+            url :{
+                type: GraphQLString
+            },
+            x:{
+                type : GraphQLInt
+            },
+            y :{
+                type: GraphQLInt
+            }
+    }
+}
+})
+var urlType= new GraphQLObjectType({
+    name: 'url',
+    fields: function(){
+        return {
+           
+            url :{
+                type: GraphQLString
+            },
+            x:{
+                type : GraphQLInt
+            },
+            y :{
+                type: GraphQLInt
+            }
+
+        }
+    }
+})
 
 var textType= new GraphQLObjectType({
     name: 'text',
@@ -69,9 +103,9 @@ var logoType = new GraphQLObjectType({
             text: {
                 type: new GraphQLList(textType)
             },
-            // url:{
-            //     type: GraphQLList(GraphQLString)
-            // },
+            url:{
+                type: GraphQLList(urlType)
+            },
             height:{
                 type: GraphQLInt
             },
@@ -184,9 +218,9 @@ var mutation = new GraphQLObjectType({
                     text: {
                         type: new GraphQLList(textTypeInput)
                     },
-                    // url:{
-                    //     type: new GraphQLList( GraphQLString)
-                    // },
+                    url:{
+                        type: new GraphQLList( urlTypeInput)
+                    },
                     height:{
                         type: new GraphQLNonNull(GraphQLInt)
                     },
@@ -232,9 +266,9 @@ var mutation = new GraphQLObjectType({
                     text: {
                         type: new GraphQLList(textTypeInput)
                     },
-                    // url:{
-                    //     type: new GraphQLList( GraphQLString)
-                    // },
+                    url:{
+                        type: new GraphQLList( urlTypeInput)
+                    },
                     height:{
                         type: new GraphQLNonNull(GraphQLInt)
                     },
@@ -263,7 +297,7 @@ var mutation = new GraphQLObjectType({
                 },
                 resolve(root, params) {
                     return LogoModel.findByIdAndUpdate(params.id,
-                        { text: params.text, height: params.height, width: params.width , 
+                        { text: params.text, url: params.url, height: params.height, width: params.width , 
                             backgroundColor : params.backgroundColor, borderColor : params.borderColor,
                             borderWidth: params.borderWidth, borderRadius: params.borderRadius,
                             padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
