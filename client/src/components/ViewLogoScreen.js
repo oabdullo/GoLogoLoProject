@@ -8,7 +8,13 @@ const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
-            text
+            text{
+                text
+                color
+                fontSize
+                x
+                y
+            }
             height
             width
             color
@@ -54,7 +60,7 @@ class ViewLogoScreen extends Component {
                                     <div className="col-6">
                                         <dl>
                                             <dt>Text:</dt>
-                                            <dd>{data.logo.text}</dd>
+                                            <dd>{data.logo.text[0].text}</dd>
                                             <dt>Height:</dt>
                                             <dd>{data.logo.height}</dd>
                                             <dt>width:</dt>
@@ -111,7 +117,7 @@ class ViewLogoScreen extends Component {
                                             borderRadius: data.logo.borderRadius + "px",
                                             padding: data.logo.padding + "px",
                                             margin: data.logo.margin + "px"
-                                        }}>{data.logo.text}</span>
+                                        }}>{data.logo.text[0].text}</span>
                                     </div>
                                 </div>
                             </div>

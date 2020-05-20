@@ -144,7 +144,7 @@ var queryType = new GraphQLObjectType({
             getLogoByText: {
                 type: new GraphQLList(logoType),
                 args: {
-                    texts: {
+                    text: {
                         name: 'text',
                         type: textTypeInput
                         
@@ -186,7 +186,7 @@ var mutation = new GraphQLObjectType({
                 type: logoType,
                 args: {
                     text: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLList(textTypeInput)
                     },
                     // url:{
                     //     type: new GraphQLList( GraphQLString)
@@ -277,7 +277,7 @@ var mutation = new GraphQLObjectType({
                 },
                 resolve(root, params) {
                     return LogoModel.findByIdAndUpdate(params.id,
-                        { text: params.text.text, url: params.url, height: params.height, width: params.width ,  color: params.color, fontSize: params.fontSize,
+                        { text: params.text, url: params.url, height: params.height, width: params.width ,  color: params.color, fontSize: params.fontSize,
                             backgroundColor : params.backgroundColor, borderColor : params.borderColor,
                             borderWidth: params.borderWidth, borderRadius: params.borderRadius,
                             padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
