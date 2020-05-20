@@ -5,6 +5,9 @@ import { Query, Mutation } from "react-apollo";
 import { clamp } from "../utils/utlity";
 import * as html2canvas from 'html2canvas';
 import TextEditWorkspace from './TextEditWorkspace.js';
+import {filter} from "graphql-anywhere"
+import {Rnd} from "react-rnd";
+
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -19,8 +22,6 @@ const GET_LOGO = gql`
             }
             height
             width
-            color
-            fontSize
             backgroundColor
             borderColor
             borderWidth
@@ -34,11 +35,9 @@ const GET_LOGO = gql`
 const UPDATE_LOGO = gql`
     mutation updateLogo(
         $id: String!,
-        $text: String!,
+        $text: [textInput]!,
         $height: Int!,
         $width: Int!,
-        $color: String!,
-        $fontSize: Int!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderWidth: Int!,
@@ -50,8 +49,7 @@ const UPDATE_LOGO = gql`
                 text: $text,
                 height: $height,
                 width: $width,
-                color: $color,
-                fontSize: $fontSize
+                
                 backgroundColor: $backgroundColor,
                 borderColor: $borderColor,
                 borderWidth: $borderWidth,
@@ -62,29 +60,26 @@ const UPDATE_LOGO = gql`
                 }
         }
 `;
-const LogoDefaults = {
-    TEXT : [{
-        text: "text",
-        fontSize: 12,
-        color : "#AA0000",
-        x: 12,
-        y: 12
-    }],
-    TEXT_COLOR : "#FF0000",
-    FONT_SIZE : 24,
-    BORDER_RADIUS: 12,
-    BACKGROUND_COLOR:"#AA0000",
-    MARGIN: 12,
-    BORDER_COLOR: "#AA00FF",
-    BORDER_THICKNESS: 2,
-    PADDING: 2,
-    HEIGHT: 100,
-    WIDTH: 400
-  
-  }
-class EditLogoScreen extends Component {
 
+class EditLogoScreen extends Component {
+    handleCoordinates=(e, data, index)=>{
+        this.props.logo.text[index].x = data.x;
+        this.props.logo.text[index].y = data.y;
+
+    }
         flag= false;
+        handleAddText=(event)=>{
+            let temp ={
+                text: this.state.text[0].text,
+                fontSize: this.state.fontSize,
+                color: this.state.color,
+                x: 12,
+                y: 12
+            }
+            this.state.text.push(temp)
+            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.flag= true;
+        }    
         handleTextChange=(event)=>{
             this.state.text[0].text = event.target.value
             this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
@@ -95,6 +90,7 @@ class EditLogoScreen extends Component {
             this.flag= true;
         }
         handleColorChange=(event)=>{
+            this.state.text[0].color = event.target.value
             this.setState({text: this.state.text, color: event.target.value, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
@@ -146,16 +142,20 @@ class EditLogoScreen extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     if(!this.flag){
+                        let fill = filter(GET_LOGO, data);
                         this.state= {
-                            text:data.logo.text,
-                            color: data.logo.color,
-                            backgroundColor:data.logo.backgroundColor,
-                            borderColor:data.logo.borderColor,
-                            fontSize:data.logo.fontSize,
-                            borderRadius: data.logo.borderRadius,
-                            borderWidth: data.logo.borderWidth,
-                            margin : data.logo.margin,
-                            padding : data.logo.padding
+                            
+                            text:fill.logo.text,
+                            color: fill.logo.text[0].color,
+                            backgroundColor:fill.logo.backgroundColor,
+                            borderColor:fill.logo.borderColor,
+                            fontSize:fill.logo.text[0].fontSize,
+                            borderRadius: fill.logo.borderRadius,
+                            borderWidth: fill.logo.borderWidth,
+                            margin : fill.logo.margin,
+                            padding : fill.logo.padding,
+                            height: fill.logo.height,
+                            width: fill.logo.width
                         }
                     }
                     return (
@@ -172,10 +172,10 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body row">                                            
                                             <form className="col-6" onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, text: text.value, height: parseInt(height.value), width: parseInt(width.value) ,color: color.value, fontSize: parseInt(fontSize.value),
-                                                                            backgroundColor: backgroundColor.value, borderColor: borderColor.value,
-                                                                            borderWidth: parseInt(borderWidth.value), borderRadius: parseInt(borderRadius.value),
-                                                                            padding: parseInt(padding.value), margin: parseInt(margin.value)  } });
+                                                updateLogo({ variables: { id: data.logo._id, text: this.state.text, height : parseInt(this.state.height), width: parseInt(this.state.width) , 
+                                                    backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor,
+                                                    borderWidth: parseInt(this.state.borderWidth), borderRadius: parseInt(this.state.borderRadius),
+                                                    padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)} });
                                                 text.value = "";
                                                 height.vaule= "";
                                                 width.value = "";
@@ -188,11 +188,14 @@ class EditLogoScreen extends Component {
                                                 padding.value = "";
                                                 margin.value = "";
                                             }}>
+                                                                                                <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
+
                                                 <div className="form-group col-8">
+
                                         <label htmlFor="text">Text:</label>
                                         <input type="text" className="form-control" name="text" ref={node => {
                                             text = node;
-                                        }} onChange={this.handleTextChange} placeholder="Text" defaultValue={LogoDefaults.TEXT[0].text} />
+                                        }} onChange={this.handleTextChange} placeholder="Text" defaultValue={this.state.text[0].text} />
                                     </div>
                                     <div className="form-group col-8">
                                         <label htmlFor="fontSize">Font Size:</label>
@@ -224,13 +227,13 @@ class EditLogoScreen extends Component {
                                                     <label htmlFor="height">Height :</label>
                                                     <input type="number" onInput={()=>{height.value = clamp(height.value, 0, 1400);}} className="form-control" name="height" ref={node => {
                                                         height = node;
-                                                    }} onChange={this.handleHeightChange}  defaultValue={LogoDefaults.HEIGHT} />
+                                                    }} onChange={this.handleHeightChange}  defaultValue={this.state.height} />
                                                 </div>
                                                 <div className="form-group col-8">
                                                     <label htmlFor="width">Width :</label>
                                                     <input type="number" onInput={()=>{width.value = clamp(width.value, 0, 1400);}} className="form-control" name="width" ref={node => {
                                                         width = node;
-                                                    }} onChange={this.handleWidthChange} defaultValue={LogoDefaults.WIDTH} />
+                                                    }} onChange={this.handleWidthChange} defaultValue={this.state.width} />
                                                 </div>
                                     <div className="form-group col-8">
                                         <label htmlFor="borderWidth">Border Width:</label>
@@ -276,6 +279,7 @@ class EditLogoScreen extends Component {
                                                 }}>{this.state.renderText ? this.state.renderText :  data.logo.text}</span>
                                             </div> */}
                                             <div className="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
+                                            
                                             {loading && <p>Loading...</p>}
                                             {error && <p>Error :( Please try again</p>}
                                         </div>

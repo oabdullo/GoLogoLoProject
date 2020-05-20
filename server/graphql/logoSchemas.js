@@ -78,12 +78,8 @@ var logoType = new GraphQLObjectType({
             width:{
                 type: GraphQLInt
             },
-            color: {
-                type: GraphQLString
-            },
-            fontSize: {
-                type: GraphQLInt
-            },
+            
+            
             backgroundColor: {
                 type: GraphQLString
             },
@@ -197,12 +193,7 @@ var mutation = new GraphQLObjectType({
                     width:{
                         type: new GraphQLNonNull(GraphQLInt)
                     },
-                    color: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    fontSize: {
-                        type: new GraphQLNonNull(GraphQLInt)
-                    },
+                    
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -250,12 +241,7 @@ var mutation = new GraphQLObjectType({
                     width:{
                         type: new GraphQLNonNull(GraphQLInt)
                     },
-                    color: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    fontSize: {
-                        type: new GraphQLNonNull(GraphQLInt)
-                    },
+                   
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -277,7 +263,7 @@ var mutation = new GraphQLObjectType({
                 },
                 resolve(root, params) {
                     return LogoModel.findByIdAndUpdate(params.id,
-                        { text: params.text, url: params.url, height: params.height, width: params.width ,  color: params.color, fontSize: params.fontSize,
+                        { text: params.text, height: params.height, width: params.width , 
                             backgroundColor : params.backgroundColor, borderColor : params.borderColor,
                             borderWidth: params.borderWidth, borderRadius: params.borderRadius,
                             padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {

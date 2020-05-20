@@ -9,8 +9,6 @@ const ADD_LOGO = gql`
         $text: [textInput]!,
         $height: Int!,
         $width: Int!,
-        $color: String!,
-        $fontSize: Int!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderWidth: Int!,
@@ -21,8 +19,6 @@ const ADD_LOGO = gql`
             text: $text,
             height: $height,
             width: $width,
-            color: $color,
-            fontSize: $fontSize,
             backgroundColor: $backgroundColor,
             borderColor: $borderColor,
             borderWidth: $borderWidth,
@@ -37,7 +33,7 @@ const LogoDefaults = {
     TEXT : [{
         text: "text",
         fontSize: 12,
-        color : "#AA0000",
+        color : "#000000",
         x: 12,
         y: 12
     }],
@@ -55,6 +51,19 @@ const LogoDefaults = {
   }
 class CreateLogoScreen extends Component {
     flag= false;
+    handleAddText=(event)=>{
+        let temp ={
+            
+            text: this.state.text.text,
+            fontSize: this.state.fontSize,
+            color: this.state.color,
+            x: 12,
+            y: 12
+        }
+        this.state.text.push(temp)
+        this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }    
     handleTextChange=(event)=>{
         this.state.text[0].text = event.target.value
         this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
@@ -65,6 +74,7 @@ class CreateLogoScreen extends Component {
         this.flag= true;
     }
     handleColorChange=(event)=>{
+        this.state.text[0].color = event.target.value
         this.setState({text: this.state.text, color: event.target.value, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
         this.flag= true;
     }
@@ -73,6 +83,7 @@ class CreateLogoScreen extends Component {
         this.flag= true;
     }
     handleFontSizeChange=(event)=>{
+        this.state.text[0].fontSize = event.target.value
         this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: event.target.value, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
         this.flag= true;
     }
@@ -136,12 +147,12 @@ class CreateLogoScreen extends Component {
                                 <h3 className="panel-title">
                                     Create Logo
                             </h3>
-                            <button type="button" className="btn btn-success">Add Text</button>
+                            <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
                             </div>
                             <div className="panel-body row">
                                 <form className="col-6" onSubmit={e => {
                                     e.preventDefault();
-                                    addLogo({ variables: { text: this.state.text, color: this.state.color , height : parseInt(this.state.height), width: parseInt(this.state.width) , fontSize: parseInt(this.state.height),
+                                    addLogo({ variables: { text: this.state.text, height : parseInt(this.state.height), width: parseInt(this.state.width) , 
                                                             backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor,
                                                             borderWidth: parseInt(this.state.borderWidth), borderRadius: parseInt(this.state.borderRadius),
                                                             padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)} });
@@ -223,7 +234,7 @@ class CreateLogoScreen extends Component {
                                         <label htmlFor="margin">Margin:</label>
                                         <input type="number" onInput={()=>{margin.value = clamp(margin.value, 0, 100);}} className="form-control" name="margin" ref={node => {
                                             margin = node;
-                                        }} onChange={this.handleMarginChange} defaultValue={this.handleMarginChange} placeholder="Margin" />
+                                        }} onChange={this.handleMarginChange} defaultValue={LogoDefaults.MARGIN} placeholder="Margin" />
                                     </div>
                                     <button type="submit" className="btn btn-success">Submit</button>
                                    
@@ -245,7 +256,7 @@ class CreateLogoScreen extends Component {
                                         margin: (this.state.renderMargin ? this.state.renderMargin : 0) + "px"
                                     }}>{this.state.renderText.text ? this.state.renderText[0].text: "New Logo"}</span>
                                 </div> */}
-                                <div class="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
+                                <div className="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
                                 {loading && <p>Loading...</p>}
                                 {error && <p>Error :( Please try again</p>}
                             </div>

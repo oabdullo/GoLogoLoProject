@@ -17,8 +17,6 @@ const GET_LOGO = gql`
             }
             height
             width
-            color
-            fontSize
             backgroundColor
             borderColor
             borderWidth
@@ -66,13 +64,13 @@ class ViewLogoScreen extends Component {
                                             <dt>width:</dt>
                                             <dd>{data.logo.width}</dd>
                                             <dt>Color:</dt>
-                                            <dd>{data.logo.color}</dd>
+                                            <dd>{data.logo.text[0].fontSize}</dd>
                                             <dt>BackgroundColor:</dt>
                                             <dd>{data.logo.backgroundColor}</dd>
                                             <dt>BorderColor:</dt>
                                             <dd>{data.logo.borderColor}</dd>
                                             <dt>Font Size:</dt>
-                                            <dd>{data.logo.fontSize}</dd>
+                                            <dd>{data.logo.text[0].fontSize}</dd>
                                             <dt>Border Width:</dt>
                                             <dd>{data.logo.borderWidth}</dd>
                                             <dt>Border Radius:</dt>
@@ -106,13 +104,13 @@ class ViewLogoScreen extends Component {
                                         <span style={{
                                             overflow: "auto",
                                             display: "inline-block",
-                                            color: data.logo.color,
+                                            color: data.logo.text[0].color,
                                             height: data.logo.height,
                                             width:  data.logo.width,
                                             backgroundColor: data.logo.backgroundColor,
                                             borderColor: data.logo.borderColor,
                                             borderStyle: "solid",
-                                            fontSize: data.logo.fontSize + "pt",
+                                            fontSize: data.logo.text[0].fontSize + "pt",
                                             borderWidth: data.logo.borderWidth + "px",
                                             borderRadius: data.logo.borderRadius + "px",
                                             padding: data.logo.padding + "px",
