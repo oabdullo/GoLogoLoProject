@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import {filter} from "graphql-anywhere"
+import TextEditWorkspace from './TextEditWorkspace.js';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -42,14 +44,28 @@ const DELETE_LOGO = gql`
 `;
 
 class ViewLogoScreen extends Component {
-
+    
     render() {
         return (
             <Query pollInterval={500} query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
-
+                    let fill = filter(GET_LOGO, data);
+                        this.state= {
+                            text:fill.logo.text,
+                            url: fill.logo.url,
+                            color: fill.logo.text[0].color,
+                            backgroundColor:fill.logo.backgroundColor,
+                            borderColor:fill.logo.borderColor,
+                            fontSize:fill.logo.text[0].fontSize,
+                            borderRadius: fill.logo.borderRadius,
+                            borderWidth: fill.logo.borderWidth,
+                            margin : fill.logo.margin,
+                            padding : fill.logo.padding,
+                            height: fill.logo.height,
+                            width: fill.logo.width
+                        }
                     return (
                         <div className="container">
                             <div className="panel panel-default">
@@ -107,7 +123,7 @@ class ViewLogoScreen extends Component {
                                         )}
                                     </Mutation>
                                     </div>
-                                    <div className="col-6">
+                                    {/* <div className="col-6">
                                         <span style={{
                                             overflow: "auto",
                                             display: "inline-block",
@@ -123,7 +139,9 @@ class ViewLogoScreen extends Component {
                                             padding: data.logo.padding + "px",
                                             margin: data.logo.margin + "px"
                                         }}>{data.logo.text[0].text}</span>
-                                    </div>
+                                    </div> */}
+                                    <div className="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
+
                                 </div>
                             </div>
                         </div>

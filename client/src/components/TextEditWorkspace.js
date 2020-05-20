@@ -7,6 +7,10 @@ class TextEditWorkspace extends Component {
         this.props.logo.text[index].y = data.y;
 
     }
+    handleUrlCoordinates=(e, data, index)=>{
+        this.props.logo.url[index].x = data.x;
+        this.props.logo.url[index].y = data.y;
+    }
     render() {
         const styles = {
             
@@ -34,7 +38,8 @@ class TextEditWorkspace extends Component {
                 style={ styles.container }>
                 {this.props.logo.text.map((texts, index) => (<Rnd position={{ x: texts.x, y: texts.y }} 
   onDragStop={(e, data) => {this.handleCoordinates(e,data,index)}} key={index} style={{fontSize: texts.fontSize, color: texts.color}}> {texts.text}  </Rnd>))}
-  
+              {this.props.logo.url.map((url, index) => (<Rnd position={{ x: url.x, y: url.y }} 
+  onDragStop={(e, data) => {this.handleUrlCoordinates(e,data,index)}} key={index} > <img src={url.url} />  </Rnd>))}
             </div>
             
         )

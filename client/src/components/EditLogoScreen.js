@@ -68,6 +68,7 @@ const UPDATE_LOGO = gql`
 `;
 
 class EditLogoScreen extends Component {
+    flag= false;
     handleURLChange=(event)=>{
         this.state.url[0].url = event.target.value
         this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
@@ -78,7 +79,7 @@ class EditLogoScreen extends Component {
         this.props.logo.text[index].y = data.y;
 
     }
-        flag= false;
+        
         handleAddText=(event)=>{
             let temp ={
                 text: this.state.text[0].text,
@@ -88,53 +89,63 @@ class EditLogoScreen extends Component {
                 y: 12
             }
             this.state.text.push(temp)
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
-        }    
+        }
+        handleAddImage=(event)=>{
+            let temp ={
+                url: this.state.url[0].url,
+                x: 12,
+                y: 12
+            }
+            this.state.url.push(temp)
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.flag= true;
+        }      
         handleTextChange=(event)=>{
             this.state.text[0].text = event.target.value
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleBackgroundChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: event.target.value, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: event.target.value, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleColorChange=(event)=>{
             this.state.text[0].color = event.target.value
-            this.setState({text: this.state.text, color: event.target.value, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: event.target.value, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleBorderColorChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: event.target.value, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: event.target.value, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleFontSizeChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: event.target.value, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: event.target.value, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleHeightChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: event.target.value, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: event.target.value, width: this.state.width})
             this.flag= true;
         }
         handleWidthChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: event.target.value})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: event.target.value})
             this.flag= true;
         }
         handleBorderWidthChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:event.target.value, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:event.target.value, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleBorderRadiusChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:event.target.value, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:event.target.value, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handlePaddingChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:event.target.value, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:event.target.value, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
         handleMarginChange=(event)=>{
-            this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:event.target.value, padding:this.state.padding, height: this.state.height, width: this.state.width})
+            this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:event.target.value, padding:this.state.padding, height: this.state.height, width: this.state.width})
             this.flag= true;
         }
 
@@ -201,6 +212,7 @@ class EditLogoScreen extends Component {
                                                 margin.value = "";
                                             }}>
                                             <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
+                                            <button type="button" onClick={this.handleAddImage} className="btn btn-success">Add Image</button>
 
                                                 <div className="form-group col-8">
 
@@ -227,7 +239,7 @@ class EditLogoScreen extends Component {
                                         <label htmlFor="url">URL:</label>
                                         <input type="text" className="form-control" name="url" ref={node => {
                                             url = node;
-                                        }} onChange={this.handleURLChange} placeholder="Url"   />
+                                        }} onChange={this.handleURLChange} placeholder="Url" defaultValue={this.state.url[0].url}  />
                                     </div>
                                     <div className="form-group col-4">
                                         <label htmlFor="backgroundColor">Background Color:</label>
