@@ -19,6 +19,8 @@ const GET_LOGO = gql`
             }
             url{
                 url
+                height
+                width
                 x
                 y
             }

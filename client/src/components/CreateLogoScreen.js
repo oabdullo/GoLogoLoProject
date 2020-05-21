@@ -41,6 +41,8 @@ const LogoDefaults = {
     }],
     URL :[{
         url: "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+        height: 45,
+        width: 45,
         x: 12, 
         y: 40
     }],
@@ -52,25 +54,52 @@ const LogoDefaults = {
     BORDER_COLOR: "#AA00FF",
     BORDER_THICKNESS: 2,
     PADDING: 2,
-    HEIGHT: 100,
+    HEIGHT: 400,
     WIDTH: 400
   
   }
 class CreateLogoScreen extends Component {
     flag= false;
+    handleUrlCoordinates=(e, data, index)=>{
+        this.state.url[index].x = data.x;
+        this.state.url[index].y = data.y;
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }
+
+    handleCoordinates=(e, data, index)=>{
+        this.state.text[index].x = data.x;
+        this.state.text[index].y = data.y;
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }
     handleAddText=(event)=>{
         let temp ={
 
             text: this.state.text.text,
             fontSize: this.state.fontSize,
             color: this.state.color,
+            height: 45,
+            width: 45,
             x: 12,
             y: 12
         }
         this.state.text.push(temp)
         this.setState({text: this.state.text, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
         this.flag= true;
-    }    
+    }
+    handleAddImage=(event)=>{
+        let temp ={
+            url: this.state.url[0].url,
+            height:45,
+            width: 45,
+            x: 12,
+            y: 12
+        }
+        this.state.url.push(temp)
+        this.setState({text: this.state.text,  url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }     
     handleTextChange=(event)=>{
         this.state.text[0].text = event.target.value
         this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
@@ -161,6 +190,8 @@ class CreateLogoScreen extends Component {
                                     Create Logo
                             </h3>
                             <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
+                            <button type="button" onClick={this.handleAddImage} className="btn btn-primary">Add Image</button>
+
                             </div>
                             <div className="panel-body row">
                                 <form className="col-6" onSubmit={e => {
@@ -276,7 +307,7 @@ class CreateLogoScreen extends Component {
                                         margin: (this.state.renderMargin ? this.state.renderMargin : 0) + "px"
                                     }}>{this.state.renderText.text ? this.state.renderText[0].text: "New Logo"}</span>
                                 </div> */}
-                                <div className="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
+                                <div className="col 6 overflow- auto" > <TextEditWorkspace handleCoordinates={this.handleCoordinates} handleUrlCoordinates={this.handleUrlCoordinates} logo={this.state} /> </div>
                                 {loading && <p>Loading...</p>}
                                 {error && <p>Error :( Please try again</p>}
                             </div>

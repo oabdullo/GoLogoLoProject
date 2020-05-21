@@ -36,10 +36,13 @@ class TextEditWorkspace extends Component {
             <div className="center-align col "
             
                 style={ styles.container }>
-                {this.props.logo.text.map((texts, index) => (<Rnd position={{ x: texts.x, y: texts.y }} 
-  onDragStop={(e, data) => {this.handleCoordinates(e,data,index)}} key={index} style={{fontSize: texts.fontSize, color: texts.color}}> {texts.text}  </Rnd>))}
-              {this.props.logo.url.map((url, index) => (<Rnd position={{ x: url.x, y: url.y }} 
-  onDragStop={(e, data) => {this.handleUrlCoordinates(e,data,index)}} key={index} > <img src={url.url} />  </Rnd>))}
+                {this.props.logo.text.map((texts, index) => (<Rnd position={{ x: texts.x, y: texts.y }} enableResizing={"Disabled"}
+  onDragStop={(e, data) => {this.props.handleCoordinates(e,data,index)}} key={index} style={{fontSize: texts.fontSize, color: texts.color}}> {texts.text}  </Rnd>))}
+              {this.props.logo.url.map((urls, index) => (<Rnd position={{ x: urls.x, y: urls.y }} size={{ width: urls.width,  height: urls.height }}
+              onResize={(e, direction, ref, delta, position) => {
+                this.props.handleResize(e, direction, ref, delta, position, index)
+               
+              }} onDragStop={(e, data) => {this.props.handleUrlCoordinates(e,data,index)}} key={index} > <img src={urls.url} />  </Rnd>))}
             </div>
             
         )

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { clamp } from "../utils/utlity";
-import * as html2canvas from 'html2canvas';
 import TextEditWorkspace from './TextEditWorkspace.js';
 import {filter} from "graphql-anywhere"
 import {Rnd} from "react-rnd";
+import htmlToImage from 'html-to-image';
 
 
 const GET_LOGO = gql`
@@ -22,6 +22,8 @@ const GET_LOGO = gql`
             }
             url {
                 url
+                height
+                width
                 x
                 y
             }
@@ -69,15 +71,43 @@ const UPDATE_LOGO = gql`
 
 class EditLogoScreen extends Component {
     flag= false;
+    handleResize=(e, direction, ref, delta, position, index)=>{
+        this.state.url[index].width= ref.offsetWidth
+        this.state.url[index].height = ref.offsetHeight
+        this.setState({
+            
+            ...position
+          });
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }
     handleURLChange=(event)=>{
         this.state.url[0].url = event.target.value
         this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
         this.flag= true;
     }
-    handleCoordinates=(e, data, index)=>{
-        this.props.logo.text[index].x = data.x;
-        this.props.logo.text[index].y = data.y;
+    handleExport=()=>{
+        htmlToImage.toJpeg(document.getElementById('logoWork'), { quality: 0.95 })
+    .then(function (dataUrl) {
+      var link = document.createElement('a');
+    link.download = 'my-image-name.jpeg';
+    link.href = dataUrl;
+    link.click();
+  });
+  
+    }
+    handleUrlCoordinates=(e, data, index)=>{
+        this.state.url[index].x = data.x;
+        this.state.url[index].y = data.y;
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
+    }
 
+    handleCoordinates=(e, data, index)=>{
+        this.state.text[index].x = data.x;
+        this.state.text[index].y = data.y;
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.flag= true;
     }
         
         handleAddText=(event)=>{
@@ -95,6 +125,8 @@ class EditLogoScreen extends Component {
         handleAddImage=(event)=>{
             let temp ={
                 url: this.state.url[0].url,
+                height:45,
+                width: 45,
                 x: 12,
                 y: 12
             }
@@ -213,6 +245,7 @@ class EditLogoScreen extends Component {
                                             }}>
                                             <button type="button" onClick={this.handleAddText} className="btn btn-success">Add Text</button>
                                             <button type="button" onClick={this.handleAddImage} className="btn btn-success">Add Image</button>
+                                            <button type="button" onClick={this.handleExport} className="btn btn-primary">Export</button>
 
                                                 <div className="form-group col-8">
 
@@ -308,7 +341,7 @@ class EditLogoScreen extends Component {
                                                     margin: (this.state.renderMargin ? this.state.renderMargin : data.logo.margin) + "px"
                                                 }}>{this.state.renderText ? this.state.renderText :  data.logo.text}</span>
                                             </div> */}
-                                            <div className="col 6 overflow- auto" > <TextEditWorkspace logo={this.state} /> </div>
+                                            <div id={"logoWork"} className="col 6 overflow- auto" > <TextEditWorkspace handleResize={this.handleResize} handleCoordinates={this.handleCoordinates} handleUrlCoordinates={this.handleUrlCoordinates} logo={this.state} /> </div>
                                             
                                             {loading && <p>Loading...</p>}
                                             {error && <p>Error :( Please try again</p>}

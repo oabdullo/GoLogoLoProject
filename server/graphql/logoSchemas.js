@@ -39,6 +39,12 @@ var urlTypeInput = new GraphQlInputObjectType({
             url :{
                 type: GraphQLString
             },
+            height:{
+                type: GraphQLInt
+            },
+            width:{
+                type: GraphQLInt
+            },
             x:{
                 type : GraphQLInt
             },
@@ -55,6 +61,12 @@ var urlType= new GraphQLObjectType({
            
             url :{
                 type: GraphQLString
+            },
+            height:{
+                type: GraphQLInt
+            },
+            width:{
+                type: GraphQLInt
             },
             x:{
                 type : GraphQLInt
