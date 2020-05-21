@@ -76,7 +76,7 @@ class CreateLogoScreen extends Component {
     handleAddText=(event)=>{
         let temp ={
 
-            text: this.state.text.text,
+            text: this.state.text[0].text,
             fontSize: this.state.fontSize,
             color: this.state.color,
             height: 45,

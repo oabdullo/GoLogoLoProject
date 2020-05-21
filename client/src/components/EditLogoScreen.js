@@ -72,13 +72,10 @@ const UPDATE_LOGO = gql`
 class EditLogoScreen extends Component {
     flag= false;
     handleResize=(e, direction, ref, delta, position, index)=>{
-        this.state.url[index].width= ref.offsetWidth
-        this.state.url[index].height = ref.offsetHeight
-        this.setState({
-            
-            ...position
-          });
-        this.setState({text: this.state.text, url: this.state.url, color: this.state.color, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
+        this.state.url[index].width= parseInt(ref.style.width, 10);
+        this.state.url[index].height = parseInt(ref.style.height, 10)
+        
+        this.setState({text: this.state.text, url: this.state.url, color: this.state.color,...position, backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, fontSize: this.state.fontSize, borderRadius:this.state.borderRadius, borderWidth:this.state.borderWidth, margin:this.state.margin, padding:this.state.padding, height: this.state.height, width: this.state.width})
         this.flag= true;
     }
     handleURLChange=(event)=>{
